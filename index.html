@@ -4,586 +4,484 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VAYO STRIKE 3D</title>
+<title>VAYO KIDS — Learn English</title>
 <style>
+:root{
+ --pink:#ff7bac;
+ --purple:#7654d9;
+ --blue:#59b9f5;
+ --yellow:#ffe584;
+}
 *{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#101820;color:white;font-family:Arial}
-#game{position:fixed;inset:0}
-#hud{
- position:fixed;top:15px;left:15px;z-index:5;
- background:#081522cc;padding:12px 16px;
- border-radius:12px;line-height:1.8;font-weight:bold
+body{
+ margin:0;font-family:"Trebuchet MS",Arial,sans-serif;
+ background:linear-gradient(145deg,#fff4cc,#fce3fa,#dff5ff);
+ color:#453b68;min-height:100vh;
 }
-#crosshair{
- position:fixed;left:50%;top:50%;
- transform:translate(-50%,-50%);
- color:#fff;font-size:32px;pointer-events:none;
- text-shadow:0 0 4px black;z-index:4
+header{
+ text-align:center;padding:22px 12px;
+ background:#ffffffa8;border-bottom:4px solid #fff;
 }
-#menu{
- position:fixed;inset:0;background:#07121eea;
- z-index:10;display:flex;align-items:center;
- justify-content:center;flex-direction:column;
- text-align:center;padding:20px
+h1{margin:0;font-size:clamp(27px,6vw,42px);color:#ed5d98}
+.subtitle{font-size:16px;margin-top:7px}
+main{max-width:1050px;margin:auto;padding:15px}
+.hero{
+ background:white;border-radius:30px;
+ padding:20px;display:flex;align-items:center;
+ justify-content:center;gap:25px;flex-wrap:wrap;
+ box-shadow:0 8px 25px #8b6ca326;
 }
-#menu h1{font-size:36px;color:#f0c34d}
+.bear{
+ font-size:105px;cursor:pointer;
+ animation:bounce 2.5s infinite;
+ user-select:none;
+}
+.bear.talking{animation:talk .28s infinite alternate}
+@keyframes bounce{
+ 0%,100%{transform:translateY(0) rotate(-4deg)}
+ 50%{transform:translateY(-12px) rotate(4deg)}
+}
+@keyframes talk{
+ from{transform:scale(1) rotate(-6deg)}
+ to{transform:scale(1.12) rotate(6deg)}
+}
+.speech{
+ background:#f1eaff;padding:18px;
+ border-radius:22px;max-width:440px;
+ text-align:center;
+}
+.speech h2{margin:4px;color:#7048c5}
 button{
- border:0;border-radius:10px;padding:14px 20px;
- background:#2379d5;color:white;font-weight:bold;
- font-size:16px;cursor:pointer;touch-action:none;
- user-select:none
+ border:0;cursor:pointer;border-radius:20px;
+ padding:13px 20px;font-size:17px;
+ font-weight:bold;touch-action:manipulation;
 }
-#start{background:#e0aa25;color:#101820;font-size:20px}
-#notice{
- position:fixed;top:15px;left:50%;
- transform:translateX(-50%);z-index:5;
- font-weight:bold;color:#ffe36b;text-align:center
+.speakBtn{background:var(--purple);color:white}
+.categories{
+ display:flex;gap:9px;overflow-x:auto;
+ padding:17px 0;scrollbar-width:thin;
 }
-#mobile{
- position:fixed;bottom:20px;left:0;width:100%;
- display:flex;justify-content:space-between;
- padding:0 20px;z-index:6;pointer-events:none
+.category{
+ background:white;color:#5b4787;
+ border:3px solid transparent;white-space:nowrap;
 }
-#mobile>*{pointer-events:auto}
-#joystick{
- width:135px;height:135px;border:2px solid #ffffff77;
- border-radius:50%;background:#ffffff22;
- position:relative;touch-action:none
+.category.active{
+ background:#7654d9;color:white;border-color:#c8b6ff;
 }
-#stick{
- width:55px;height:55px;border-radius:50%;
- background:#ffffffaa;position:absolute;
- left:50%;top:50%;transform:translate(-50%,-50%)
+.sectionTitle{text-align:center;font-size:25px;margin:8px}
+.grid{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:15px;margin:18px 0;
 }
-#fire{
- width:90px;height:90px;border-radius:50%;
- background:#df3847
+.card{
+ background:white;border-radius:25px;
+ min-height:185px;padding:15px;
+ text-align:center;box-shadow:0 6px 0 #e4d7f3;
+ border:3px solid #fff;cursor:pointer;
+ transition:transform .15s;
 }
-#reload{background:#426080}
-#buttons{display:flex;align-items:end;gap:10px}
-#damage{
- position:fixed;inset:0;background:#ff0000;
- opacity:0;pointer-events:none;z-index:3
+.card:active{transform:scale(.95)}
+.card.selected{border-color:#ff84bd;background:#fff4fa}
+.picture{
+ font-size:clamp(65px,9vw,95px);
+ line-height:1.35;display:block;
 }
-#hint{
- position:fixed;bottom:10px;left:50%;
- transform:translateX(-50%);color:#d0d9e2;
- font-size:12px;z-index:4;white-space:nowrap
+.english{font-size:24px;font-weight:bold;color:#6550bf}
+.tajik{font-size:15px;color:#84799b;margin-top:5px}
+.soundIcon{font-size:19px;margin-top:9px}
+.lesson{
+ background:white;border-radius:28px;
+ padding:22px;text-align:center;margin:25px 0;
 }
-@media(max-width:600px){
- #hud{font-size:12px;padding:8px}
- #joystick{width:115px;height:115px}
- #fire{width:75px;height:75px}
- #buttons{gap:5px}
- #buttons button{font-size:12px;padding:12px}
- #hint{display:none}
+.lesson button{background:#ffcc4d;color:#4b3b24}
+#quizChoices{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:12px;margin-top:20px;
+}
+.quizOption{
+ background:#f4edff;font-size:65px;
+ border:3px solid transparent;
+ min-height:125px;
+}
+.quizOption.correct{background:#d7ffe0;border-color:#44bf70}
+.quizOption.wrong{background:#ffe3e3;border-color:#f27d7d}
+#quizWord{font-size:27px;color:#7053cc;font-weight:bold}
+footer{text-align:center;padding:20px;color:#83769c}
+@media(max-width:650px){
+ .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+ .card{min-height:150px;padding:10px}
+ .picture{font-size:65px}
+ .english{font-size:20px}
+ .hero{gap:5px}
+ .bear{font-size:90px}
+ .speech{padding:12px}
+ .quizOption{font-size:48px;min-height:95px}
 }
 </style>
 </head>
 <body>
 
-<div id="game"></div>
-<div id="damage"></div>
-<div id="crosshair">+</div>
+<header>
+<h1>🌈 VAYO KIDS 🧸</h1>
+<div class="subtitle">English Adventure — Барои кӯдакони 3+</div>
+</header>
 
-<div id="hud">
- ❤️ HP: <span id="hp">100</span><br>
- 🔫 AMMO: <span id="ammo">30</span> / <span id="reserve">120</span><br>
- 🎯 KILLS: <span id="kills">0</span><br>
- 🌊 WAVE: <span id="wave">1</span>
-</div>
+<main>
 
-<div id="notice"></div>
-
-<div id="menu">
- <h1>🎯 VAYO STRIKE 3D</h1>
- <p>FPS — 3D Shooting Game</p>
- <p>WASD — ҳаракат | Mouse — нигоҳ кардан<br>
- Click — тирпарронӣ | R — пур кардани тир</p>
- <button id="start">▶ START GAME</button>
-</div>
-
-<div id="mobile">
- <div id="joystick"><div id="stick"></div></div>
- <div id="buttons">
-  <button id="reload">RELOAD</button>
-  <button id="fire">🔥 FIRE</button>
+<section class="hero">
+ <div id="bear" class="bear" role="button"
+      tabindex="0" aria-label="Хирсча">🧸</div>
+ <div class="speech">
+  <h2 id="heroEnglish">Hello, my friend! 👋</h2>
+  <p id="heroTajik">Салом, дӯсти ман!</p>
+  <button class="speakBtn" id="repeatBtn">🔊 Гӯш кун!</button>
  </div>
-</div>
+</section>
 
-<div id="hint">Компютер: барои идора кардани камера ба майдон клик кун</div>
+<nav class="categories" id="categories"></nav>
 
-<script type="module">
-import * as THREE from
-"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
+<h2 class="sectionTitle" id="categoryTitle">👋 Greetings</h2>
+<div class="grid" id="cards"></div>
+
+<section class="lesson">
+ <h2>⭐ Бозии омӯзишӣ</h2>
+ <p>Калимаро гӯш кун ва расми дурустро интихоб намо!</p>
+ <button id="newQuiz">🎲 Бозии нав</button>
+ <p id="quizWord">Ready?</p>
+ <div id="quizChoices"></div>
+ <h3 id="quizResult"></h3>
+ <p>⭐ Ситорачаҳо: <strong id="stars">0</strong></p>
+</section>
+
+</main>
+<footer>💖 VAYO KIDS — Learn, Play & Smile</footer>
+
+<script>
+"use strict";
+
+const lessons={
+ greetings:{
+  title:"👋 Greetings — Салом",
+  items:[
+   ["👋","Hello","Салом"],
+   ["😊","Hi","Салом"],
+   ["👋","Bye-bye","Хайр"],
+   ["🙏","Thank you","Раҳмат"],
+   ["❤️","I love you","Ман туро дӯст медорам"],
+   ["🌞","Good morning","Субҳ ба хайр"],
+   ["🌙","Good night","Шаб ба хайр"],
+   ["😃","Happy","Хурсанд"],
+   ["😴","Sleepy","Хоболуд"]
+  ]
+ },
+ animals:{
+  title:"🐶 Animals — Ҳайвонот",
+  items:[
+   ["🐱","Cat","Гурба"],
+   ["🐶","Dog","Саг"],
+   ["🐰","Rabbit","Харгӯш"],
+   ["🐻","Bear","Хирс"],
+   ["🦁","Lion","Шер"],
+   ["🐯","Tiger","Паланг"],
+   ["🐘","Elephant","Фил"],
+   ["🐒","Monkey","Маймун"],
+   ["🐼","Panda","Панда"],
+   ["🐮","Cow","Гов"],
+   ["🐑","Sheep","Гӯсфанд"],
+   ["🐴","Horse","Асп"],
+   ["🐥","Chick","Чӯҷа"],
+   ["🦆","Duck","Мурғобӣ"],
+   ["🐟","Fish","Моҳӣ"]
+  ]
+ },
+ fruits:{
+  title:"🍎 Fruits — Меваҳо",
+  items:[
+   ["🍎","Apple","Себ"],
+   ["🍌","Banana","Банан"],
+   ["🍊","Orange","Афлесун"],
+   ["🍓","Strawberry","Қулфинай"],
+   ["🍇","Grapes","Ангур"],
+   ["🍉","Watermelon","Тарбуз"],
+   ["🍐","Pear","Нок"],
+   ["🍒","Cherry","Гелос"],
+   ["🍍","Pineapple","Ананас"],
+   ["🥭","Mango","Манго"],
+   ["🥝","Kiwi","Киви"],
+   ["🍑","Peach","Шафтолу"]
+  ]
+ },
+ colors:{
+  title:"🎨 Colors — Рангҳо",
+  items:[
+   ["🔴","Red","Сурх"],
+   ["🔵","Blue","Кабуд"],
+   ["🟢","Green","Сабз"],
+   ["🟡","Yellow","Зард"],
+   ["🟠","Orange","Норанҷӣ"],
+   ["🟣","Purple","Бунафш"],
+   ["⚫","Black","Сиёҳ"],
+   ["⚪","White","Сафед"],
+   ["🩷","Pink","Гулобӣ"],
+   ["🟤","Brown","Қаҳваранг"]
+  ]
+ },
+ numbers:{
+  title:"🔢 Numbers — Рақамҳо",
+  items:[
+   ["1️⃣","One","Як"],
+   ["2️⃣","Two","Ду"],
+   ["3️⃣","Three","Се"],
+   ["4️⃣","Four","Чор"],
+   ["5️⃣","Five","Панҷ"],
+   ["6️⃣","Six","Шаш"],
+   ["7️⃣","Seven","Ҳафт"],
+   ["8️⃣","Eight","Ҳашт"],
+   ["9️⃣","Nine","Нӯҳ"],
+   ["🔟","Ten","Даҳ"]
+  ]
+ },
+ body:{
+  title:"👀 Body — Бадан",
+  items:[
+   ["👀","Eyes","Чашмҳо"],
+   ["👂","Ear","Гӯш"],
+   ["👃","Nose","Бинӣ"],
+   ["👄","Mouth","Даҳон"],
+   ["✋","Hand","Даст"],
+   ["🦶","Foot","Пой"],
+   ["🦷","Tooth","Дандон"],
+   ["👅","Tongue","Забон"],
+   ["💪","Arm","Даст"],
+   ["🦵","Leg","Пой"]
+  ]
+ },
+ things:{
+  title:"🏠 Things — Ашё",
+  items:[
+   ["🚗","Car","Мошин"],
+   ["🏠","House","Хона"],
+   ["⚽","Ball","Тӯб"],
+   ["📚","Book","Китоб"],
+   ["🧸","Teddy bear","Хирсча"],
+   ["🪑","Chair","Курсӣ"],
+   ["🛏️","Bed","Кат"],
+   ["🚲","Bicycle","Дучарха"],
+   ["🚌","Bus","Автобус"],
+   ["✈️","Airplane","Ҳавопаймо"],
+   ["🚂","Train","Қатора"],
+   ["🚀","Rocket","Мушак"]
+  ]
+ },
+ food:{
+  title:"🥛 Food — Хӯрок",
+  items:[
+   ["🥛","Milk","Шир"],
+   ["💧","Water","Об"],
+   ["🍞","Bread","Нон"],
+   ["🥚","Egg","Тухм"],
+   ["🧀","Cheese","Панир"],
+   ["🍚","Rice","Биринҷ"],
+   ["🍯","Honey","Асал"],
+   ["🍪","Cookie","Кулча"],
+   ["🥕","Carrot","Сабзӣ"],
+   ["🥔","Potato","Картошка"],
+   ["🍅","Tomato","Помидор"],
+   ["🥒","Cucumber","Бодиринг"]
+  ]
+ }
+};
+
+let current="greetings";
+let lastItem=lessons.greetings.items[0];
+let quizAnswer=null;
+let stars=0;
+let speaking=false;
+let speakingTimeout=null;
 
 const $=id=>document.getElementById(id);
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x90b4c8);
-scene.fog=new THREE.Fog(0x90b4c8,35,95);
 
-const camera=new THREE.PerspectiveCamera(
- 75,innerWidth/innerHeight,.1,200
-);
-
-const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.shadowMap.enabled=true;
-$("game").appendChild(renderer.domElement);
-
-scene.add(new THREE.HemisphereLight(0xffffff,0x506070,2));
-
-const sun=new THREE.DirectionalLight(0xffffff,2);
-sun.position.set(20,40,15);
-sun.castShadow=true;
-scene.add(sun);
-
-const material=c=>new THREE.MeshStandardMaterial({color:c});
-
-function cube(w,h,d,c,x,y,z){
- const m=new THREE.Mesh(
-  new THREE.BoxGeometry(w,h,d),material(c)
- );
- m.position.set(x,y,z);
- m.castShadow=true;
- m.receiveShadow=true;
- scene.add(m);
- return m;
+function setBearTalking(value){
+ $("bear").classList.toggle("talking",value);
+ speaking=value;
 }
 
-/* MAP */
-
-cube(100,1,100,0x777b73,0,-.5,0);
-
-const walls=[];
-function wall(w,h,d,x,y,z,c=0xb9a88b){
- const m=cube(w,h,d,c,x,y,z);
- walls.push(m);
- return m;
+function englishVoice(){
+ const voices=window.speechSynthesis?.getVoices()||[];
+ return voices.find(v=>v.lang.toLowerCase()==="en-us")
+  ||voices.find(v=>v.lang.toLowerCase().startsWith("en"))
+  ||null;
 }
 
-wall(100,10,2,0,5,-50);
-wall(100,10,2,0,5,50);
-wall(2,10,100,-50,5,0);
-wall(2,10,100,50,5,0);
-
-wall(20,7,3,-20,3.5,-15);
-wall(3,7,20,15,3.5,-15);
-wall(18,7,3,20,3.5,20);
-wall(3,7,15,-20,3.5,20);
-
-for(let i=0;i<18;i++){
- const x=(Math.random()-.5)*75;
- const z=(Math.random()-.5)*75;
- if(Math.hypot(x,z)<13)continue;
- wall(3,2.5,3,x,1.25,z,0x826b50);
-}
-
-/* PLAYER */
-
-camera.position.set(0,1.7,10);
-let yaw=0,pitch=0;
-let hp=100,ammo=30,reserve=120,kills=0,wave=1;
-let playing=false;
-let fireCooldown=0;
-let reloading=false;
-let reloadTime=0;
-let damageFlash=0;
-
-const keys={};
-const joy={x:0,y:0};
-const enemies=[];
-const raycaster=new THREE.Raycaster();
-
-const gun=new THREE.Group();
-camera.add(gun);
-scene.add(camera);
-
-function gunPart(w,h,d,c,x,y,z){
- const m=new THREE.Mesh(
-  new THREE.BoxGeometry(w,h,d),material(c)
- );
- m.position.set(x,y,z);
- gun.add(m);
-}
-gunPart(.22,.25,1.1,0x232b31,.35,-.3,-.65);
-gunPart(.15,.2,.55,0x111111,.35,-.46,-.35);
-gunPart(.1,.1,.4,0x4e5961,.35,-.19,-1.05);
-
-/* ENEMIES */
-
-function spawnEnemy(){
- const group=new THREE.Group();
-
- const body=new THREE.Mesh(
-  new THREE.CylinderGeometry(.55,.5,1.4,10),
-  material(0xb63236)
- );
- body.position.y=1.3;
- group.add(body);
-
- const head=new THREE.Mesh(
-  new THREE.SphereGeometry(.38,12,10),
-  material(0xd7a17e)
- );
- head.position.y=2.3;
- group.add(head);
-
- const legMaterial=material(0x29323b);
- for(const x of [-.25,.25]){
-  const leg=new THREE.Mesh(
-   new THREE.BoxGeometry(.25,.9,.3),legMaterial
-  );
-  leg.position.set(x,.45,0);
-  group.add(leg);
- }
-
- let x,z;
- do{
-  x=(Math.random()-.5)*85;
-  z=(Math.random()-.5)*85;
- }while(Math.hypot(x-camera.position.x,z-camera.position.z)<18);
-
- group.position.set(x,0,z);
- scene.add(group);
-
- const enemy={
-  group,hp:100,speed:2.5+wave*.25,
-  attackCooldown:0
- };
- group.traverse(obj=>{
-  if(obj.isMesh)obj.userData.enemy=enemy;
- });
- enemies.push(enemy);
-}
-
-function spawnWave(){
- for(let i=0;i<Math.min(3+wave,14);i++)
-  spawnEnemy();
- $("wave").textContent=wave;
- showNotice("WAVE "+wave);
-}
-
-function showNotice(t){
- $("notice").textContent=t;
- setTimeout(()=>{
-  if($("notice").textContent===t)
-   $("notice").textContent="";
- },1400);
-}
-
-function updateHud(){
- $("hp").textContent=Math.max(0,Math.ceil(hp));
- $("ammo").textContent=ammo;
- $("reserve").textContent=reserve;
- $("kills").textContent=kills;
- $("wave").textContent=wave;
-}
-
-/* SHOOTING */
-
-function shoot(){
- if(!playing||reloading||fireCooldown>0)return;
-
- if(ammo<=0){
-  reload();
+function speak(text,callback){
+ if(!("speechSynthesis" in window)){
+  $("heroTajik").textContent=
+   "Ин браузер овозхониро дастгирӣ намекунад.";
   return;
  }
 
- ammo--;
- fireCooldown=.14;
- gun.position.z=.13;
- gun.rotation.x=.1;
+ speechSynthesis.cancel();
+ clearTimeout(speakingTimeout);
 
- raycaster.setFromCamera(new THREE.Vector2(0,0),camera);
+ const utterance=new SpeechSynthesisUtterance(text);
+ utterance.lang="en-US";
+ utterance.rate=.76;
+ utterance.pitch=1.18;
+ utterance.volume=1;
 
- const targets=[
-  ...walls,
-  ...enemies.flatMap(e=>{
-   const arr=[];
-   e.group.traverse(o=>{
-    if(o.isMesh)arr.push(o);
-   });
-   return arr;
-  })
- ];
+ const voice=englishVoice();
+ if(voice)utterance.voice=voice;
 
- const hits=raycaster.intersectObjects(targets,false);
+ utterance.onstart=()=>setBearTalking(true);
+ utterance.onend=()=>{
+  setBearTalking(false);
+  if(callback)callback();
+ };
+ utterance.onerror=()=>setBearTalking(false);
 
- if(hits.length){
-  const hit=hits[0];
-  const enemy=hit.object.userData.enemy;
+ speechSynthesis.speak(utterance);
+}
 
-  if(enemy){
-   const headshot=hit.object.position.y>2;
-   enemy.hp-=headshot?100:40;
+function chooseItem(item){
+ lastItem=item;
+ $("heroEnglish").textContent=item[1];
+ $("heroTajik").textContent=item[2];
+ speak(item[1]);
 
-   if(enemy.hp<=0){
-    scene.remove(enemy.group);
-    enemies.splice(enemies.indexOf(enemy),1);
-    kills++;
-    showNotice(headshot?"HEADSHOT!":"ENEMY DOWN!");
+ document.querySelectorAll(".card").forEach(c=>{
+  c.classList.toggle(
+   "selected",c.dataset.word===item[1]
+  );
+ });
+}
 
-    if(enemies.length===0){
-     wave++;
-     spawnWave();
-    }
+function renderCategories(){
+ const nav=$("categories");
+ nav.innerHTML="";
+
+ for(const [key,lesson] of Object.entries(lessons)){
+  const btn=document.createElement("button");
+  btn.className="category"+(key===current?" active":"");
+  btn.textContent=lesson.title.split(" — ")[0];
+  btn.onclick=()=>{
+   current=key;
+   renderCategories();
+   renderCards();
+   chooseItem(lessons[current].items[0]);
+   $("quizChoices").innerHTML="";
+   $("quizWord").textContent="Ready?";
+   $("quizResult").textContent="";
+  };
+  nav.appendChild(btn);
+ }
+}
+
+function renderCards(){
+ const lesson=lessons[current];
+ $("categoryTitle").textContent=lesson.title;
+ const grid=$("cards");
+ grid.innerHTML="";
+
+ for(const item of lesson.items){
+  const card=document.createElement("div");
+  card.className="card";
+  card.dataset.word=item[1];
+  card.setAttribute("role","button");
+  card.tabIndex=0;
+
+  const picture=document.createElement("span");
+  picture.className="picture";
+  picture.textContent=item[0];
+
+  const en=document.createElement("div");
+  en.className="english";
+  en.textContent=item[1];
+
+  const tg=document.createElement("div");
+  tg.className="tajik";
+  tg.textContent=item[2];
+
+  const sound=document.createElement("div");
+  sound.className="soundIcon";
+  sound.textContent="🔊";
+
+  card.append(picture,en,tg,sound);
+  card.onclick=()=>chooseItem(item);
+  card.onkeydown=e=>{
+   if(e.key==="Enter"||e.key===" "){
+    e.preventDefault();
+    chooseItem(item);
    }
-  }
+  };
+  grid.appendChild(card);
  }
- updateHud();
 }
 
-function reload(){
- if(!playing||reloading||ammo===30||reserve<=0)return;
- reloading=true;
- reloadTime=1.5;
- showNotice("RELOADING...");
-}
-
-function finishReload(){
- const amount=Math.min(30-ammo,reserve);
- ammo+=amount;
- reserve-=amount;
- reloading=false;
- updateHud();
-}
-
-/* MOVEMENT */
-
-function collision(x,z){
- if(Math.abs(x)>48||Math.abs(z)>48)return true;
-
- const p=new THREE.Vector3(x,1.5,z);
- for(const w of walls){
-  const b=new THREE.Box3().setFromObject(w);
-  b.expandByScalar(.45);
-  if(b.containsPoint(p))return true;
+function shuffle(array){
+ const a=[...array];
+ for(let i=a.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [a[i],a[j]]=[a[j],a[i]];
  }
- return false;
+ return a;
 }
 
-function updatePlayer(dt){
- let forward=0,side=0;
+function newQuiz(){
+ const items=lessons[current].items;
+ const options=shuffle(items).slice(0,3);
+ quizAnswer=options[Math.floor(Math.random()*options.length)];
 
- if(keys.w||keys.arrowup)forward++;
- if(keys.s||keys.arrowdown)forward--;
- if(keys.a||keys.arrowleft)side--;
- if(keys.d||keys.arrowright)side++;
+ $("quizWord").textContent="Find: "+quizAnswer[1];
+ $("quizResult").textContent="";
+ const area=$("quizChoices");
+ area.innerHTML="";
 
- forward-=joy.y;
- side+=joy.x;
+ options.forEach(item=>{
+  const btn=document.createElement("button");
+  btn.className="quizOption";
+  btn.textContent=item[0];
+  btn.setAttribute("aria-label",item[1]);
 
- const len=Math.hypot(forward,side);
- if(len>1){
-  forward/=len;
-  side/=len;
- }
+  btn.onclick=()=>{
+   if(!quizAnswer)return;
 
- const speed=8;
- const dx=(-Math.sin(yaw)*forward+
-           Math.cos(yaw)*side)*speed*dt;
- const dz=(-Math.cos(yaw)*forward-
-           Math.sin(yaw)*side)*speed*dt;
-
- if(!collision(camera.position.x+dx,camera.position.z))
-  camera.position.x+=dx;
-
- if(!collision(camera.position.x,camera.position.z+dz))
-  camera.position.z+=dz;
-
- camera.rotation.order="YXZ";
- camera.rotation.y=yaw;
- camera.rotation.x=pitch;
-}
-
-/* ENEMY AI */
-
-function updateEnemies(dt){
- for(const e of enemies){
-  const dx=camera.position.x-e.group.position.x;
-  const dz=camera.position.z-e.group.position.z;
-  const d=Math.hypot(dx,dz);
-
-  e.group.rotation.y=Math.atan2(dx,dz);
-  e.attackCooldown-=dt;
-
-  if(d>2&&d<38){
-   const nx=e.group.position.x+dx/d*e.speed*dt;
-   const nz=e.group.position.z+dz/d*e.speed*dt;
-   if(!collision(nx,nz)){
-    e.group.position.x=nx;
-    e.group.position.z=nz;
+   if(item===quizAnswer){
+    btn.classList.add("correct");
+    $("quizResult").textContent="🌟 Excellent! Very good!";
+    stars++;
+    $("stars").textContent=stars;
+    speak("Excellent! "+item[1]);
+    quizAnswer=null;
+   }else{
+    btn.classList.add("wrong");
+    $("quizResult").textContent="😊 Try again!";
+    speak("Try again");
    }
-  }
+  };
 
-  if(d<2.3&&e.attackCooldown<=0){
-   hp-=10;
-   damageFlash=.4;
-   e.attackCooldown=1;
-   updateHud();
+  area.appendChild(btn);
+ });
 
-   if(hp<=0)gameOver();
-  }
+ speak("Find "+quizAnswer[1]);
+}
+
+$("repeatBtn").onclick=()=>speak(lastItem[1]);
+$("bear").onclick=()=>speak("Hello, my friend!");
+$("bear").onkeydown=e=>{
+ if(e.key==="Enter"||e.key===" "){
+  e.preventDefault();
+  speak("Hello, my friend!");
  }
-}
-
-function gameOver(){
- playing=false;
- document.exitPointerLock?.();
- $("menu").style.display="flex";
- $("menu").querySelector("h1").textContent="GAME OVER";
- $("menu").querySelector("p").textContent=
-  "KILLS: "+kills+" | WAVE: "+wave;
- $("start").textContent="▶ PLAY AGAIN";
-}
-
-/* CONTROLS */
-
-document.addEventListener("keydown",e=>{
- const k=e.key.toLowerCase();
- keys[k]=true;
- if([" ","arrowup","arrowdown","arrowleft","arrowright"]
-  .includes(k))e.preventDefault();
-
- if(k==="r")reload();
- if(k===" "&&!e.repeat)shoot();
-});
-
-document.addEventListener("keyup",e=>{
- keys[e.key.toLowerCase()]=false;
-});
-
-document.addEventListener("mousemove",e=>{
- if(document.pointerLockElement!==renderer.domElement)return;
- yaw-=e.movementX*.0025;
- pitch-=e.movementY*.0025;
- pitch=THREE.MathUtils.clamp(pitch,-1.3,1.3);
-});
-
-renderer.domElement.addEventListener("click",()=>{
- if(!playing)return;
- if(matchMedia("(pointer:fine)").matches){
-  if(document.pointerLockElement===renderer.domElement)
-   shoot();
-  else renderer.domElement.requestPointerLock();
- }
-});
-
-const joystick=$("joystick");
-const stick=$("stick");
-
-function joystickMove(e){
- const r=joystick.getBoundingClientRect();
- let x=e.clientX-(r.left+r.width/2);
- let y=e.clientY-(r.top+r.height/2);
- const max=r.width*.34;
- const len=Math.hypot(x,y);
- if(len>max){x=x/len*max;y=y/len*max}
- joy.x=x/max;
- joy.y=y/max;
- stick.style.left="calc(50% + "+x+"px)";
- stick.style.top="calc(50% + "+y+"px)";
-}
-
-joystick.addEventListener("pointerdown",e=>{
- joystick.setPointerCapture(e.pointerId);
- joystickMove(e);
-});
-joystick.addEventListener("pointermove",e=>{
- if(joystick.hasPointerCapture(e.pointerId))
-  joystickMove(e);
-});
-function releaseJoystick(){
- joy.x=joy.y=0;
- stick.style.left="50%";
- stick.style.top="50%";
-}
-joystick.addEventListener("pointerup",releaseJoystick);
-joystick.addEventListener("pointercancel",releaseJoystick);
-
-$("fire").addEventListener("pointerdown",e=>{
- e.preventDefault();
- shoot();
-});
-$("reload").onclick=reload;
-
-/* MOBILE CAMERA SWIPE */
-
-let lookPointer=null,lastX=0,lastY=0;
-renderer.domElement.addEventListener("pointerdown",e=>{
- if(e.pointerType==="mouse")return;
- lookPointer=e.pointerId;
- lastX=e.clientX;lastY=e.clientY;
- renderer.domElement.setPointerCapture(e.pointerId);
-});
-renderer.domElement.addEventListener("pointermove",e=>{
- if(e.pointerId!==lookPointer)return;
- yaw-=(e.clientX-lastX)*.006;
- pitch-=(e.clientY-lastY)*.006;
- pitch=THREE.MathUtils.clamp(pitch,-1.3,1.3);
- lastX=e.clientX;lastY=e.clientY;
-});
-renderer.domElement.addEventListener("pointerup",()=>{
- lookPointer=null;
-});
-
-$("start").onclick=()=>{
- for(const e of enemies)scene.remove(e.group);
- enemies.length=0;
- hp=100;ammo=30;reserve=120;
- kills=0;wave=1;
- yaw=0;pitch=0;
- camera.position.set(0,1.7,10);
- playing=true;
- reloading=false;
- fireCooldown=0;
- $("menu").style.display="none";
- spawnWave();
- updateHud();
 };
+$("newQuiz").onclick=newQuiz;
 
-/* GAME LOOP */
+renderCategories();
+renderCards();
 
-const clock=new THREE.Clock();
-
-function animate(){
- requestAnimationFrame(animate);
- const dt=Math.min(clock.getDelta(),.04);
-
- if(playing){
-  fireCooldown=Math.max(0,fireCooldown-dt);
-  updatePlayer(dt);
-  updateEnemies(dt);
-
-  if(reloading){
-   reloadTime-=dt;
-   if(reloadTime<=0)finishReload();
-  }
-
-  gun.position.z=THREE.MathUtils.lerp(
-   gun.position.z,0,dt*12
-  );
-  gun.rotation.x=THREE.MathUtils.lerp(
-   gun.rotation.x,0,dt*12
-  );
-
-  damageFlash=Math.max(0,damageFlash-dt);
-  $("damage").style.opacity=damageFlash*.5;
- }
-
- renderer.render(scene,camera);
+if("speechSynthesis" in window){
+ speechSynthesis.getVoices();
+ speechSynthesis.onvoiceschanged=()=>englishVoice();
 }
-
-window.addEventListener("resize",()=>{
- camera.aspect=innerWidth/innerHeight;
- camera.updateProjectionMatrix();
- renderer.setSize(innerWidth,innerHeight);
-});
-
-updateHud();
-animate();
 </script>
 </body>
 </html>
